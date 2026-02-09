@@ -19,8 +19,8 @@
 
 ## 📂 项目结构
 
-├── .streamlit/          # 配置文件（存放 API Key 和数据库密码）
 ├── app.py               # 主程序：Streamlit 网页逻辑与 AI 交互
 ├── dcd_spider.py        # 爬虫脚本：负责懂车帝数据抓取
 ├── db_import.py         # 数据入库：将 CSV 清洗并导入 MySQL
+
 └── README.md            # 项目说明文档

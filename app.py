@@ -107,17 +107,36 @@ if st.sidebar.button("开始分析"):
         st.subheader(f"✅ {price_range[0]}-{price_range[1]}万 销量排行")
         st.dataframe(df)
 
-        # 图表部分
-        st.subheader("📈 销量与价格分布图")
+        # 图表部分（专业版：解决云端乱码并保留可读性）
+        st.subheader("📈 销量与价格分布趋势 (Top 15)")
+        
+        # 1. 生成不乱码的横坐标 (No.1, No.2 ...)
+        x_labels = [f"No.{i+1}" for i in range(len(df))]
+        
         fig, ax1 = plt.subplots(figsize=(10, 5))
-        # 使用拼音或英文标签防止 Linux 乱码
-        ax1.bar(df['series'], df['monthly_sales'], color='skyblue', label='Sales')
+        
+        # 2. 绘制销量柱状图
+        ax1.bar(x_labels, df['monthly_sales'], color='skyblue', alpha=0.7, label='Sales Volume')
         ax1.set_ylabel('Sales')
+        
+        # 3. 绘制价格折线图 (双轴)
         ax2 = ax1.twinx()
-        ax2.plot(df['series'], df['min_price'], color='red', marker='o', label='Price')
-        ax2.set_ylabel('Price (Wan)')
-        plt.xticks(rotation=45)
+        ax2.plot(x_labels, df['min_price'], color='red', marker='o', linewidth=2, label='Min Price (Wan)')
+        ax2.set_ylabel('Price (Wan RMB)')
+        
+        # 4. 设置标题和图例 (全英文保证不乱码)
+        plt.title("Sales & Price Trend Analysis")
+        ax1.legend(loc='upper left')
+        ax2.legend(loc='upper right')
+        
         st.pyplot(fig)
+
+        # 5. 关键：提供一个“翻译对照表”，让其他人看懂 No.1 是什么车
+        st.write("🔍 **坐标轴对应车型参考 (Index Reference):**")
+        # 创建一个带有排名的精简视图
+        ref_df = df[['brand', 'series', 'monthly_sales', 'min_price']].copy()
+        ref_df.index = x_labels # 将索引改为 No.1, No.2...
+        st.table(ref_df) # 使用静态表格展示，清晰明了
 
         # AI 报告
         st.divider()
@@ -159,3 +178,4 @@ if user_input:
 
 st.sidebar.markdown("---")
 st.sidebar.caption("📅 数据最后更新：2026-02-10")
+

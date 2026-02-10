@@ -2,6 +2,8 @@
 
 本项目是一款集成数据爬取、结构化存储、BI可视化与大语言模型（LLM）分析的端到端数据分析系统。通过 Text-to-SQL 技术，用户可以使用自然语言直接对懂车帝汽车销量数据进行深度挖掘。
 
+> **在线演示地址**: [👉 点击这里立即访问 (https://dcd-car-ai-analysis.streamlit.app/)]
+
 ## 🌟 核心亮点
 
 * **智能语义查询 (Text-to-SQL)**：利用 DeepSeek 大模型将用户口语化提问（如“推荐20万左右销量好的SUV”）实时转化为精准的 MySQL 查询语句。
@@ -22,5 +24,5 @@
 ├── app.py               # 主程序：Streamlit 网页逻辑与 AI 交互
 ├── dcd_spider.py        # 爬虫脚本：负责懂车帝数据抓取
 ├── db_import.py         # 数据入库：将 CSV 清洗并导入 MySQL
-
 └── README.md            # 项目说明文档
+

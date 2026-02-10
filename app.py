@@ -51,8 +51,6 @@ def get_data(min_p, max_p, car_type="全部", query_sql=None):
         conn.close()
         return df
     except Exception as e:
-        # 数据库失败 -> 启动 CSV 模式
-        except Exception as e:
         st.caption("ℹ️ 当前运行模式：本地静态数据演示模式") # 使用较小的文字，不显眼
         df_backup = pd.read_csv("dongchedi_sales.csv")
         
@@ -179,5 +177,6 @@ if user_input:
 
 st.sidebar.markdown("---")
 st.sidebar.caption("📅 数据最后更新：2026-02-10")
+
 
 

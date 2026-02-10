@@ -6,6 +6,7 @@ from openai import OpenAI
 
 # 1. 基础配置
 st.set_page_config(page_title="懂车帝大数据看板", page_icon="🚗", layout="wide")
+st.balloons()
 plt.rcParams['font.sans-serif'] = ['SimHei']  # 解决中文乱码
 
 # 数据库配置 
@@ -149,3 +150,4 @@ if user_input:
             )
 
             st.write(backup_res.choices[0].message.content)
+

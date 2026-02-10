@@ -38,14 +38,23 @@ def get_data(min_p, max_p, car_type=None):
         conn.close()
         return df
     except Exception as e:
-        # --- 如果失败，自动执行“降级计划” ---
-        # 这一行会在网页上显示一个黄色警告，告诉面试官你做了容错处理
         st.warning("📡 云端数据库连接受限，已切换至内置 CSV 数据源进行演示。")
-        
-        # 直接读取你上传到 GitHub 的那个 CSV 文件
+        # 读取 CSV
         df_backup = pd.read_csv("dongchedi_sales.csv")
         
-        # 模拟 SQL 的筛选逻辑，保证图表依然能动
+        # --- 核心修复：手动对齐列名 ---
+        # 对应你 CSV 的顺序：排名(0), 品牌(1), 车系(2), 价格区间(3), 当月销量(4), 车型分类(5)
+        df_backup.columns = ['rank', 'brand', 'series', 'price_range', 'monthly_sales', 'category']
+        
+        # --- 核心修复：处理价格 ---
+        # 你的 CSV 价格是 "17.98-21.98万"，我们要提取最小数字
+        # 使用正则表达式提取第一个数字
+        df_backup['min_price'] = df_backup['price_range'].str.extract(r'(\d+\.?\d*)').astype(float)
+        
+        # 确保销量是数字格式
+        df_backup['monthly_sales'] = pd.to_numeric(df_backup['monthly_sales'], errors='coerce')
+
+        # 现在的筛选逻辑就能跑通了
         mask = (df_backup['min_price'] >= min_p) & (df_backup['min_price'] <= max_p)
         if car_type and car_type != "全部":
             mask &= df_backup['category'].str.contains(car_type)
@@ -150,4 +159,5 @@ if user_input:
             )
 
             st.write(backup_res.choices[0].message.content)
+
 
